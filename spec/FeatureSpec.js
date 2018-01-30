@@ -1,34 +1,52 @@
 describe('Feature test', function () {
   var plane;
   var airport;
+  var weather;
 
   beforeEach(function () {
     plane = new Plane();
     airport = new Airport;
+    weather = jasmine.createSpyObj('weather',['isStormy'])
   });
 
-  it('planes can be instructed to land at an airport',function(){
-    plane.land(airport);
-    expect(airport.planes()).toContain(plane);
+  describe('under normal conditions',function(){
+
+    beforeEach(function () {
+      weather.isStormy.and.returnValue(false);
+    });
+
+    it('planes can be instructed to land at an airport',function(){
+      plane.land(airport);
+      expect(airport.planes()).toContain(plane);
+    });
+
+    it('planes can be instructed to take off from airport',function(){
+      plane.land(airport);
+      plane.takeoff();
+      expect(airport.planes()).not.toContain(plane);
+    });
+
   });
 
-  it('planes can be instructed to take off from airport',function(){
-    plane.land(airport);
-    plane.takeoff();
-    expect(airport.planes()).not.toContain(plane);
-  });
+  describe('when weather is stormy',function(){
 
-  it('blocks takeoff when weather is stormy',function(){
-    plane.land(airport);
-    spyOn(airport,'isStormy').and.returnValue(true);
-    expect(function(){ plane.takeoff()} ).toThrowError('cannot takeoff during storm')
-    expect(airport.planes()).toContain(plane);
-  });
+    beforeEach(function () {
+      weather.isStormy.and.returnValue(true);
+    });
 
-  it('blocks landing when weather is stormy',function(){
-    spyOn(airport,'isStormy').and.returnValue(true);
-    expect(function(){ plane.land(airport)} ).toThrowError('cannot land during storm')
-    expect(airport.planes()).not.toContain(plane);
-  });
+    it('blocks takeoff',function(){
+      plane.land(airport);
+      spyOn(airport,'isStormy').and.returnValue(true);
+      expect(function(){ plane.takeoff()} ).toThrowError('cannot takeoff during storm')
+      expect(airport.planes()).toContain(plane);
+    });
+
+    it('blocks landing',function(){
+      spyOn(airport,'isStormy').and.returnValue(true);
+      expect(function(){ plane.land(airport)} ).toThrowError('cannot land during storm')
+      expect(airport.planes()).not.toContain(plane);
+    });
+
+});
 
 });

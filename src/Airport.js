@@ -1,4 +1,5 @@
-function Airport() {
+function Airport(weather = new Weather) {
+  this._weather = weather;
   this._hangar = [];
 };
 
@@ -19,7 +20,7 @@ Airport.prototype = {
   },
 
   isStormy: function() { 
-    return false; 
+    return this._weather.isStormy(); 
   }
 
 };
