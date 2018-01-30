@@ -1,6 +1,4 @@
-function Plane(){
-  
-};
+function Plane(){};
 
 Plane.prototype = {
 
@@ -9,7 +7,9 @@ Plane.prototype = {
     this._location = airport; 
   },
 
-  takeoff: function(){ this._location.clearForTakeoff(this); },
+  takeoff: function(){ 
+    this._location.clearForTakeoff(this); 
+  }
 
-}
+};
 

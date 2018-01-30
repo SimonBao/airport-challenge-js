@@ -4,11 +4,23 @@ function Airport() {
 
 Airport.prototype = {
 
-  planes: function() { return this._hangar; },
+  planes: function() { 
+    return this._hangar; 
+  },
 
-  clearForLanding: function(plane) { this._hangar.push(plane); },
+  clearForLanding: function(plane) { 
+    if (this.isStormy()) { throw new Error('cannot land during storm')};
+    this._hangar.push(plane); 
+  },
 
-  clearForTakeoff: function(plane) { this._hangar.pop(); }
+  clearForTakeoff: function(plane) { 
+    if (this.isStormy()) { throw new Error('cannot takeoff during storm')};
+    this._hangar.pop(); 
+  },
+
+  isStormy: function() { 
+    return false; 
+  }
 
 };
 
